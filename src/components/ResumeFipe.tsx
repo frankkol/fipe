@@ -12,6 +12,8 @@ const ResumeFipe = (props: any) => {
     const [finalFetch, setFinalFetch] = useState(false);
     const { data, error, fetchData } = useFetch<any>();
     const baseURL = 'https://brasilapi.com.br/api/fipe';
+    const labelStyle: string = "text-[12px] text-gray-400 uppercase font-bold tracking-wider";
+    const valueStyle: string = "text-gray-700 font-semibold text-sm md:text-base";
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -79,51 +81,54 @@ const ResumeFipe = (props: any) => {
 
     return (
         <>
-            <div className="w-xl bg-white rounded-lg shadow-lg overflow-hidden mt-1">
+            <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden mt-1 transition-all">
                 <div className="bg-slate-700 p-2 text-center">
-                    <span className="text-white text-xs uppercase tracking-widest font-semibold font-sans">
+                    <span className="text-white text-[12px] uppercase tracking-widest font-semibold opacity-80">
                         Valor de Mercado
                     </span>
-                    <h2 className="text-2xl font-extrabold text-white">
+                    <h2 className="text-3xl font-extrabold text-white leading-tight">
                         {automobile.valor}
                     </h2>
-                    <p className="text-xs text-white font-medium mt-1">
+                    <p className="text-[12px] text-slate-300 font-medium">
                         Ref.: {automobile.mesReferencia}
                     </p>
                 </div>
 
-                <div className="p-4">
-                    <div className="grid grid-cols-2 gap-4 pb-2">
+                <div className="p-3 md:p-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div>
-                            <p className="text-xs text-gray-400 uppercase font-bold">Fabricante</p>
-                            <p className="text-gray-700 font-semibold">{automobile.marca}</p>
+                            <p className={labelStyle}>Fabricante</p>
+                            <p className={valueStyle}>{automobile.marca}</p>
                         </div>
                         <div>
-                            <p className="text-xs text-gray-400 uppercase font-bold">Modelo</p>
-                            <p className="text-gray-700 font-semibold">{automobile.modelo}</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 border-t border-gray-100 pt-2">
-                        <div>
-                            <p className="text-xs text-gray-400 uppercase font-bold">Ano Modelo</p>
-                            <p className="text-gray-700 font-semibold">{automobile.anoModelo}</p>
-                        </div>
-                        <div>
-                            <p className="text-xs text-gray-400 uppercase font-bold">Combustível</p>
-                            <p className="text-gray-700 font-semibold">{automobile.combustivel}</p>
+                            <p className={labelStyle}>Modelo</p>
+                            <p className={valueStyle}>{automobile.modelo}</p>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 items-center mt-4">
-                        <p className="text-xs text-gray-400 uppercase font-bold">
-                            Código Fipe:
-                            <strong className="text-gray-700 font-bold"> {automobile.codigoFipe}</strong>
-                        </p>
-                        <button onClick={handleSubmit} type="submit" className="bg-slate-700 text-white rounded-lg hover:bg-slate-900 font-medium py-2">Ver histórico</button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 border-t border-gray-100 pt-2 md:pt-4">
+                        <div>
+                            <p className={labelStyle}>Ano Modelo</p>
+                            <p className={valueStyle}>{automobile.anoModelo}</p>
+                        </div>
+                        <div>
+                            <p className={labelStyle}>Combustível</p>
+                            <p className={valueStyle}>{automobile.combustivel}</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-center border-t border-gray-100 pt-2 md:pt-4">
+                        <div className="flex flex-col md:flex-row md:gap-2">
+                            <p className={labelStyle}>Código Fipe:</p>
+                            <p className="text-gray-700 font-bold text-sm">{automobile.codigoFipe}</p>
+                        </div>
+                        <button onClick={handleSubmit} type="submit"
+                            className="w-full bg-slate-700 cursor-pointer text-white rounded-lg hover:bg-slate-900 font-medium py-2.5 text-sm transition-colors"
+                        >Ver histórico</button>
                     </div>
                 </div>
             </div>
+
             {finalFetch && <LoadingCar message={"Buscando histórico..."} />}
             {error && <ErrorMessage message={"Não foi localizar histórico:"} details={error.message} />}
         </>

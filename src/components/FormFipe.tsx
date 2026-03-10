@@ -16,7 +16,7 @@ interface FormFipeProps {
     setAutomobile: (data: Automobile | undefined) => void;
 }
 
-const FormFipe = ({ setAutomobile }: FormFipeProps ) => {
+const FormFipe = ({ setAutomobile }: FormFipeProps) => {
     const [erroSubmit, setErroSubmit] = useState(false);
     const [fipe, setFipe] = useState('');
     const [selectedAno, setSelectedAno] = useState<Option>();
@@ -71,25 +71,31 @@ const FormFipe = ({ setAutomobile }: FormFipeProps ) => {
         <>
             <h1 className='font-bold text-[2em] text-gray-800'>Avalie seu veículo</h1>
             <p className='text-gray-700 text-sm'>Informe seu código FIPE e ano do modelo para buscar informações do veículo.</p>
-            <div className='w-xl mt-1 py-3 rounded-lg'>
-                <form className="flex flex-col gap-2">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="flex flex-col">
-                            <label className="text-sm ml-1" htmlFor="fipe">Fipe</label>
-                            <input maxLength={8} className="rounded-lg border-2 border-stone-700 py-2 px-2 text-sm placeholder:text-sm placeholder:text-stone-400" type="text" name="fipe" placeholder="0010049" value={fipe} onChange={e => setFipe(e.target.value)} />
+            <div className='w-full flex flex-col sm:justify-center py-4'>
+                <form className="flex flex-col md:flex-row md:items-end gap-4 w-full">
+                    <div className="flex flex-col md:flex-row flex-1 gap-4">
+                        <div className="flex flex-col flex-1 w-full">
+                            <label className="text-xs font-semibold ml-1 mb-1 text-stone-600" htmlFor="fipe">Fipe</label>
+                            <input
+                                maxLength={8}
+                                className="w-full rounded-lg border-2 border-stone-700 py-2 px-3 text-sm placeholder:text-stone-400 focus:ring-2 focus:ring-slate-500 outline-none"
+                                type="text"
+                                name="fipe"
+                                placeholder="001004-9"
+                                value={fipe}
+                                onChange={e => setFipe(e.target.value)}
+                            />
                         </div>
-                        <div className="flex flex-col">
-                            <label className="text-sm ml-1" htmlFor="ano">Ano</label>
+                        <div className="flex flex-col flex-1 w-full">
+                            <label className="text-xs font-semibold ml-1 mb-1 text-stone-600" htmlFor="ano">Ano</label>
                             <select
                                 disabled={isDisabled}
                                 value={selectedAno?.anoModelo != undefined ? `${selectedAno?.anoModelo} ${selectedAno?.combustivel}` : ""}
                                 onChange={handleChange}
-                                className={`rounded-lg border-2 py-2 px-2 text-sm placeholder:text-sm
-                                ${isDisabled
-                                        ? "text-gray-400 cursor-not-allowed border-gray-200"
-                                        : "border-stone-700"}
-                        `}
-                            >
+                                className={`w-full rounded-lg border-2 py-2 px-3 text-sm transition-all ${isDisabled
+                                    ? "text-gray-400 cursor-not-allowed border-gray-200 bg-gray-50"
+                                    : "border-stone-700 bg-white focus:ring-2 focus:ring-slate-500 outline-none"}
+                                `}>
                                 <option value="" disabled>Selecione o ano modelo...</option>
                                 {anoModelo.map((opcao) => (
                                     <option key={`${opcao.anoModelo} ${opcao.combustivel}`}
@@ -104,13 +110,12 @@ const FormFipe = ({ setAutomobile }: FormFipeProps ) => {
                         disabled={isDisabled}
                         onClick={handleSubmit}
                         type="submit"
-                        className={`text-white mt-2 rounded-lg font-medium text-lg py-2 px-4
-                                ${isDisabled
-                                ? "bg-slate-400 text-gray-400 cursor-not-allowed border-gray-200"
-                                : "bg-slate-700 hover:bg-slate-900"}
-                        `}
+                        className={`w-full md:w-auto h-[42px] text-white rounded-lg font-medium text-sm px-8 transition-colors ${isDisabled
+                            ? "bg-slate-300 cursor-not-allowed"
+                            : "bg-slate-700 hover:bg-slate-900 cursor-pointer"}
+                            `}
                     >Pesquisar</button>
-                </form >
+                </form>
             </div>
 
             {loading && <LoadingCar message={"Buscando seu veículo..."} />}

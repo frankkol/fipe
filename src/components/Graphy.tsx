@@ -1,12 +1,12 @@
 import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
-import { TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, ToolboxComponent } from 'echarts/components';
+import { TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, ToolboxComponent, MarkLineComponent, MarkPointComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { useRef, useEffect } from 'react';
 import type { Table } from '../types/Table';
 import { formatterBRL, formatterMonthYear, colors } from "../utils/formatters";
 
-echarts.use([TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, ToolboxComponent, LineChart, CanvasRenderer]);
+echarts.use([TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, ToolboxComponent, MarkLineComponent, MarkPointComponent, LineChart, CanvasRenderer]);
 
 const Graphy = ({ data }: { data: Table[] }) => {
     const chartRef = useRef<HTMLDivElement>(null);
@@ -70,7 +70,40 @@ const Graphy = ({ data }: { data: Table[] }) => {
                 name: 'Valor',
                 type: 'line',
                 smooth: true,
-                data: values
+                data: values,
+                markPoint: {
+                    data: [
+                        {
+                            type: 'max',
+                            name: 'Máximo',
+                            itemStyle: { color: '#22c55e' },
+                            label: {
+                                formatter: (params: any) => `${(params.value / 1000).toFixed(1)}k`
+                            }
+                        },
+                        {
+                            type: 'min',
+                            name: 'Mínimo',
+                            itemStyle: { color: '#ef4444' },
+                            label: {
+                                formatter: (params: any) => `${(params.value / 1000).toFixed(1)}k`
+                            }
+                        }
+                    ]
+                },
+                markLine: {
+                    lineStyle: {
+                        color: '#f97316',
+                        type: 'dashed'
+                    },
+                    label: {
+                        position: 'end',
+                        formatter: (params: any) => `${(params.value / 1000).toFixed(1)}k`
+                    },
+                    data: [
+                        { type: 'average', name: 'Média' }
+                    ]
+                }
             }],
             grid: {
                 top: 30,
@@ -79,6 +112,8 @@ const Graphy = ({ data }: { data: Table[] }) => {
                 right: 30,
             },
         };
+
+        console.log(option)
 
         myChart.setOption(option);
         const handleResize = () => myChart?.resize();
@@ -92,8 +127,8 @@ const Graphy = ({ data }: { data: Table[] }) => {
     return (
         <div
             ref={chartRef}
-            className="w-xl h-80 bg-white rounded-lg shadow-lg overflow-hidden my-2"
-            style={{ minHeight: '320px' }}
+            className="w-full h-80 md:h-100 lg:aspect-video bg-white rounded-lg shadow-lg transition-all"
+            style={{ minHeight: '300px' }}
         />
     );
 };
