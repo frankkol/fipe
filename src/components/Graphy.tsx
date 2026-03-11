@@ -4,7 +4,7 @@ import { TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, To
 import { CanvasRenderer } from 'echarts/renderers';
 import { useRef, useEffect } from 'react';
 import type { Table } from '../types/Table';
-import { formatterBRL, formatterMonthYear, colors } from "../utils/formatters";
+import { formatterBRL, formatterMonthYear, formatterCompact, colors } from "../utils/formatters";
 
 echarts.use([TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, ToolboxComponent, MarkLineComponent, MarkPointComponent, LineChart, CanvasRenderer]);
 
@@ -76,17 +76,17 @@ const Graphy = ({ data }: { data: Table[] }) => {
                         {
                             type: 'max',
                             name: 'Máximo',
-                            itemStyle: { color: '#22c55e' },
+                            itemStyle: { color: colors.getColorByValue(1).hex },
                             label: {
-                                formatter: (params: any) => `${(params.value / 1000).toFixed(1)}k`
+                                formatter: (params: any) => formatterCompact(params.value)
                             }
                         },
                         {
                             type: 'min',
                             name: 'Mínimo',
-                            itemStyle: { color: '#ef4444' },
+                            itemStyle: { color: colors.getColorByValue(-1).hex },
                             label: {
-                                formatter: (params: any) => `${(params.value / 1000).toFixed(1)}k`
+                                formatter: (params: any) => formatterCompact(params.value)
                             }
                         }
                     ]
@@ -98,7 +98,7 @@ const Graphy = ({ data }: { data: Table[] }) => {
                     },
                     label: {
                         position: 'end',
-                        formatter: (params: any) => `${(params.value / 1000).toFixed(1)}k`
+                        formatter: (params: any) => formatterCompact(params.value)
                     },
                     data: [
                         { type: 'average', name: 'Média' }
@@ -112,8 +112,6 @@ const Graphy = ({ data }: { data: Table[] }) => {
                 right: 30,
             },
         };
-
-        console.log(option)
 
         myChart.setOption(option);
         const handleResize = () => myChart?.resize();

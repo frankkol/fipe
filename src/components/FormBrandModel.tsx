@@ -1,74 +1,80 @@
-interface FormModalProps {
-  setIsClick: (value: boolean) => void;
+import { useEffect, useState, type FormEvent } from 'react';
+import { SelectBrand } from './SelectBrand';
+import { SelectModel } from './SelectModel';
+import { SelectYear } from './SelectYear';
+import type { Automobile } from '../types/Automobile';
+import { useFetch } from '../hooks/useFetch';
+import { normalizarVeiculo } from '../utils/formatters';
+import { LoadingCar } from './LoadingCar';
+
+// Define que setAutomobile é uma função que recebe um objeto Automobile
+interface FormFipeProps {
+  setAutomobile: (data: Automobile | undefined) => void;
 }
 
-export function FormBrandModel({ setIsClick }: FormModalProps) {
+export function FormBrandModel({ setAutomobile }: FormFipeProps) {
+  const [selectedCodeBrand, setSelectedCodeBrand] = useState<number | undefined>();
+  const [selectedCodeModel, setSelectedCodeModel] = useState<number | undefined>();
+  const [selectedYear, setSelectedYear] = useState<number | undefined>();
+  const { data, loading, fetchData } = useFetch<Automobile>();
+  const url: string = 'https://parallelum.com.br/fipe/api/v2/cars/brands/';
+  const isDisabled = selectedYear === undefined;
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!selectedCodeBrand && !selectedCodeModel && !selectedYear) return;
+    fetchData(`${url}${selectedCodeBrand}/models/${selectedCodeModel}/years/${selectedYear}`)
+  }
+
+  useEffect(() => {
+    if (data) {
+      const dadosNormalizados = normalizarVeiculo(data);
+      setAutomobile(dadosNormalizados);
+    }
+  }, [data])
+
+  useEffect(() => {
+    setSelectedCodeModel(undefined);
+    setSelectedYear(undefined);
+    setAutomobile(undefined);
+  }, [selectedCodeBrand])
+
+  useEffect(() => { console.log(selectedCodeBrand) }, [selectedCodeBrand])
+  useEffect(() => { console.log(selectedCodeModel) }, [selectedCodeModel])
+  useEffect(() => { console.log(selectedYear) }, [selectedYear])
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-white/5 backdrop-blur-xs">
-      <div className='w-xl rounded-lg bg-gray-100/95 border-2 border-gray-700/40'>
-        <div className="relative">
+    <>
+      <h1 className='font-bold text-[2em] text-gray-800'>Avalie seu veículo</h1>
+      <p className='text-gray-700 text-sm'>Informe marca, modelo e ano do modelo para buscar informações do veículo.</p>
+      <div className='w-full flex flex-col sm:justify-center py-4'>
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:items-end">
 
-          <button
-            onClick={() => setIsClick(false)}
-            className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        {/* className="fixed mx-1 px-1 justify-baseline items-baseline" */}
-        <form className="flex flex-col gap-2 px-6 py-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col">
-              <label className="text-sm ml-1" htmlFor="ano">Marca</label>
-              <select
-                className="rounded-lg border-2 py-2 px-2 text-sm placeholder:text-sm border-stone-700"
-              >
-                <option value="" disabled>Selecione o ano modelo...</option>
-
-              </select>
-              <label className="text-sm ml-1" htmlFor="ano">Ano</label>
-              <select
-                className="rounded-lg border-2 py-2 px-2 text-sm placeholder:text-sm border-stone-700"
-              >
-                <option value="" disabled>Selecione o ano modelo...</option>
-
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label className="text-sm ml-1" htmlFor="ano">Modelo</label>
-              <select
-                className="rounded-lg border-2 py-2 px-2 text-sm placeholder:text-sm border-stone-700"
-              >
-                <option value="" disabled>Selecione o ano modelo...</option>
-
-              </select>
-
-              <div className="grid grid-cols-2 gap-4 items-center mt-4">
-                <p className="text-xs text-gray-400 uppercase font-bold">
-                  Código Fipe:
-                  <strong className="text-gray-700 font-bold"> 014069-4</strong>
-                </p>
-                <button onClick={() => setIsClick(false)} type="submit" className="bg-slate-700 cursor-pointer text-white rounded-lg hover:bg-slate-900 font-medium py-2">Copiar/Fechar</button>
-              </div>
-
-            </div>
+          <div className="flex flex-col w-full">
+            <label className="text-xs font-semibold ml-1 mb-1 text-stone-600" htmlFor="marca">Marca</label>
+            <SelectBrand onChange={setSelectedCodeBrand} />
+          </div>
+          <div className="flex flex-col w-full">
+            <label className="text-xs font-semibold ml-1 mb-1 text-stone-600" htmlFor="marca">Marca</label>
+            <SelectModel id={selectedCodeBrand} onChangeModel={setSelectedCodeModel} />
+          </div>
+          <div className="flex flex-col w-full">
+            <label className="text-xs font-semibold ml-1 mb-1 text-stone-600" htmlFor="marca">Ano</label>
+            <SelectYear idBrand={selectedCodeBrand} idModel={selectedCodeModel} onChangeYear={setSelectedYear} />
           </div>
 
-        </form >
+          <button
+            disabled={isDisabled}
+            onClick={handleSubmit}
+            type="submit"
+            className={`w-full h-10.5 text-white rounded-lg font-medium text-sm transition-colors ${isDisabled
+              ? "bg-slate-300 cursor-not-allowed"
+              : "bg-slate-700 hover:bg-slate-900 cursor-pointer"
+              }`}
+          >Pesquisar</button>
+        </form>
       </div>
-    </div>
-    // <div className="fixed inset-0 z-9999 flex items-center justify-center bg-white/5 backdrop-blur-xs">
-    //   <div className="flex flex-col items-center justify-center p-6 bg-mist-50/90 rounded-lg border border-gray-100 min-w-62">
-    //     <button className="cursor-pointer" onClick={() => setIsClick(false)}>Fechar</button>
-    //     <div className="relative w-32 h-12 overflow-hidden mb-4">
-    //       <div className="text-4xl absolute animate-drive-left right-0">🚗</div>
-    //       <div className="absolute bottom-0 w-full h-0.5 bg-gray-200"></div>
-    //     </div>
-    //   </div>
-    // </div>
+      {loading && <LoadingCar message={"Buscando seu veículo..."} />}
+    </>
   );
 }

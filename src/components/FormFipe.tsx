@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react"
 import type { FormEvent, ChangeEvent } from "react"
 import type { Automobile } from "../types/Automobile"
+import { normalizarVeiculo } from '../utils/formatters';
 import { useFetch } from "../hooks/useFetch"
 import { LoadingCar } from "./LoadingCar";
 import { ErrorMessage } from "./ErrorMessage";
+import Select from "react-select";
 
 // 1. Definição do tipo para as opções
 interface Option {
@@ -25,6 +27,15 @@ const FormFipe = ({ setAutomobile }: FormFipeProps) => {
     const url: string = 'https://brasilapi.com.br/api/fipe/preco/v1/';
     const isDisabled: boolean = anoModelo.length === 0;
 
+    const optionsAno = anoModelo.map((opcao) => ({
+        value: `${opcao.anoModelo} ${opcao.combustivel}`,
+        label: `${opcao.anoModelo} ${opcao.combustivel}`
+    }));
+
+    const selectedOption = selectedAno
+        ? { value: `${selectedAno.anoModelo} ${selectedAno.combustivel}`, label: `${selectedAno.anoModelo} ${selectedAno.combustivel}` }
+        : null;
+
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setErroSubmit(false);
         const value: any = e.target.value.split(' ');
@@ -39,8 +50,9 @@ const FormFipe = ({ setAutomobile }: FormFipeProps) => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (!selectedAno || !data) return;
+        const dadosNormalizados = data.map(normalizarVeiculo);
 
-        const autoSelected = data.find(auto =>
+        const autoSelected = dadosNormalizados.find(auto =>
             auto.combustivel === selectedAno.combustivel &&
             auto.anoModelo === selectedAno.anoModelo
         );
@@ -88,7 +100,31 @@ const FormFipe = ({ setAutomobile }: FormFipeProps) => {
                         </div>
                         <div className="flex flex-col flex-1 w-full">
                             <label className="text-xs font-semibold ml-1 mb-1 text-stone-600" htmlFor="ano">Ano</label>
-                            <select
+                            <Select value={selectedOption}
+                                isDisabled={isDisabled}
+                                options={optionsAno}
+                                onChange={(option) => { handleChange({ target: { value: option ? option.value : "" } } as any) }}
+                                placeholder="Selecione o ano modelo..."
+                                menuPortalTarget={document.body}
+                                menuPosition="fixed"
+                                styles={{
+                                    control: (base, state) => ({
+                                        ...base,
+                                        zIndex: 9999,
+                                        borderRadius: '8px',
+                                        borderWidth: '2px',
+                                        borderColor: state.isDisabled ? '#e5e7eb' : '#44403c',
+                                        boxShadow: state.isFocused ? '0 0 0 2px #64748b' : 'none',
+                                        '&:hover': { borderColor: '#44403c' },
+                                        minHeight: '42px',
+                                        fontSize: '0.875rem'
+                                    }),
+                                    placeholder: (base) => ({
+                                        ...base, color: '#a8a29e'
+                                    })
+                                }}
+                            />
+                            {/* <select
                                 disabled={isDisabled}
                                 value={selectedAno?.anoModelo != undefined ? `${selectedAno?.anoModelo} ${selectedAno?.combustivel}` : ""}
                                 onChange={handleChange}
@@ -103,14 +139,14 @@ const FormFipe = ({ setAutomobile }: FormFipeProps) => {
                                         {`${opcao.anoModelo} ${opcao.combustivel}`}
                                     </option>
                                 ))}
-                            </select>
+                            </select> */}
                         </div>
                     </div>
                     <button
                         disabled={isDisabled}
                         onClick={handleSubmit}
                         type="submit"
-                        className={`w-full md:w-auto h-[42px] text-white rounded-lg font-medium text-sm px-8 transition-colors ${isDisabled
+                        className={`w-full md:w-auto h-10.5 text-white rounded-lg font-medium text-sm px-8 transition-colors ${isDisabled
                             ? "bg-slate-300 cursor-not-allowed"
                             : "bg-slate-700 hover:bg-slate-900 cursor-pointer"}
                             `}

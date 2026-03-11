@@ -11,7 +11,7 @@ import { FormBrandModel } from "./FormBrandModel";
 const Fipe = () => {
     const [automobile, setAutomobile] = useState<Automobile>();
     const [table, setTable] = useState<Table[]>([]);
-    const [activeTab, setActiveTab] = useState<'fipe' | 'brandmodel'>('fipe');
+    const [activeTab, setActiveTab] = useState<'fipe' | 'brandmodel'>('brandmodel');
     const headStyle: string = "flex-1 py-4 text-sm font-medium transition-colors";
     const headStyleActive: string = "bg-white border-b-2 border-blue-500 text-blue-600";
     const headStyleDisable: string = "text-stone-500 hover:text-stone-700 hover:bg-stone-100";
@@ -25,20 +25,20 @@ const Fipe = () => {
             <div className="w-full lg:max-w-[40%] bg-white rounded-xl shadow-lg overflow-hidden transition-all">
                 <div className="flex border-b border-stone-200 bg-stone-50">
                     <button
-                        onClick={() => setActiveTab('fipe')}
-                        className={`${headStyle} ${activeTab === 'fipe' ? headStyleActive : headStyleDisable}`}
-                    >Código FIPE</button>
-                    <button
                         onClick={() => setActiveTab('brandmodel')}
                         className={`${headStyle} ${activeTab === 'brandmodel' ? headStyleActive : headStyleDisable}`}
                     >Marca e Modelo</button>
+                    <button
+                        onClick={() => setActiveTab('fipe')}
+                        className={`${headStyle} ${activeTab === 'fipe' ? headStyleActive : headStyleDisable}`}
+                    >Código FIPE</button>
                 </div>
 
                 <div className="py-4 px-5 md:py-6 md:px-8">
                     {activeTab === 'fipe' ? (
                         <FormFipe setAutomobile={setAutomobile} />
                     ) : (
-                        <FormBrandModel setIsClick={() => setActiveTab('fipe')} />
+                        <FormBrandModel setAutomobile={setAutomobile} />
                     )}
                     {automobile && <ResumeFipe automobile={automobile} setTable={setTable} />}
                     {table && table.length > 0 && (
