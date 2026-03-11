@@ -48,7 +48,6 @@ export const SelectModel = ({ id, onChangeModel }: PropModel) => {
             styles={{
                 control: (base, state) => ({
                     ...base,
-                    zIndex: 9999,
                     borderRadius: '8px',
                     borderWidth: '2px',
                     borderColor: state.isDisabled ? '#e5e7eb' : '#44403c',
@@ -56,6 +55,10 @@ export const SelectModel = ({ id, onChangeModel }: PropModel) => {
                     '&:hover': { borderColor: '#44403c' },
                     minHeight: '42px',
                     fontSize: '0.875rem'
+                }),
+                menuPortal: (base) => ({
+                    ...base,
+                    zIndex: 9999
                 }),
                 placeholder: (base) => ({
                     ...base, color: '#a8a29e'
