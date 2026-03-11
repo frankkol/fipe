@@ -55,7 +55,7 @@ export const SelectBrand = ({ onChange }: PropBrand) => {
                 }),
                 menuPortal: (base) => ({
                     ...base,
-                    zIndex: 9999
+                    zIndex: 9999,
                 }),
                 placeholder: (base) => ({
                     ...base, color: '#a8a29e'
