@@ -55,7 +55,7 @@ export function FormBrandModel({ setAutomobile }: FormFipeProps) {
             <SelectBrand onChange={setSelectedCodeBrand} />
           </div>
           <div className="flex flex-col w-full">
-            <label className="text-xs font-semibold ml-1 mb-1 text-stone-600" htmlFor="marca">Marca</label>
+            <label className="text-xs font-semibold ml-1 mb-1 text-stone-600" htmlFor="marca">Modelo</label>
             <SelectModel id={selectedCodeBrand} onChangeModel={setSelectedCodeModel} />
           </div>
           <div className="flex flex-col w-full">

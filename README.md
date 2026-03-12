@@ -18,11 +18,9 @@
  - [Brasil API](https://brasilapi.com.br/)
 
 ## 📸 Telas do sistema
-![Tela inicial](./public/home.png)
-![Dados veiculo](./public/automobile.png)
-![Visão gráfica](./public/graphy.png)
-![Visão tabular](./public/table.png)
-![Carregando](./public/loading.png)
+![Tela inicial Marca/Modelo](./public/home_brand_model.png)![Tela inicial FIPE](./public/home_fipe.png)
+![Dados veiculo](./public/automobile.png)![Carregando](./public/loading.png)
+![Visão gráfica](./public/graphy_table.png)
 
 ## 🌐 API
 

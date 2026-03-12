@@ -7,13 +7,11 @@ import { LoadingCar } from "./LoadingCar";
 import { ErrorMessage } from "./ErrorMessage";
 import Select from "react-select";
 
-// 1. Definição do tipo para as opções
 interface Option {
     anoModelo: number;
     combustivel: string;
 }
 
-// Define que setAutomobile é uma função que recebe um objeto Automobile
 interface FormFipeProps {
     setAutomobile: (data: Automobile | undefined) => void;
 }
@@ -124,22 +122,6 @@ const FormFipe = ({ setAutomobile }: FormFipeProps) => {
                                     })
                                 }}
                             />
-                            {/* <select
-                                disabled={isDisabled}
-                                value={selectedAno?.anoModelo != undefined ? `${selectedAno?.anoModelo} ${selectedAno?.combustivel}` : ""}
-                                onChange={handleChange}
-                                className={`w-full rounded-lg border-2 py-2 px-3 text-sm transition-all ${isDisabled
-                                    ? "text-gray-400 cursor-not-allowed border-gray-200 bg-gray-50"
-                                    : "border-stone-700 bg-white focus:ring-2 focus:ring-slate-500 outline-none"}
-                                `}>
-                                <option value="" disabled>Selecione o ano modelo...</option>
-                                {anoModelo.map((opcao) => (
-                                    <option key={`${opcao.anoModelo} ${opcao.combustivel}`}
-                                        value={`${opcao.anoModelo} ${opcao.combustivel}`}>
-                                        {`${opcao.anoModelo} ${opcao.combustivel}`}
-                                    </option>
-                                ))}
-                            </select> */}
                         </div>
                     </div>
                     <button
